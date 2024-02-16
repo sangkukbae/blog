@@ -15,104 +15,301 @@ const posts = (await getCollection('blog')).sort(
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
 	</head>
 	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/${post.slug}/`}>
-									<img
-										width={720}
-										height={360}
-										src={post.data.heroImage}
-										alt=""
-									/>
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate
-											date={post.data.pubDate}
-										/>
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
+		<!-- container -->
+		<div class="relative flex justify-center">
+			<!-- layout -->
+			<div class="w-full max-w-[100vw]">
+				<main class="relative overflow-hidden">
+					<!-- word container -->
+					<div
+						class="word-container under"
+						role="presentation"
+						aria-hidden="true"
+					>
+						Supercharge your
+					</div>
+					<div
+						class="word-container over"
+						role="presentation"
+						aria-hidden="true"
+					>
+						Supercharge your
+					</div>
+					<!-- clip grid -->
+					<div id="clip-grid" class="group grid pb-16">
+						<div
+							class="relative pb-16 grid grid-cols-[var(--site-columns-5)]"
+						>
+							<div
+								class="grid grid-cols-[var(--site-columns-5)] col-span-full"
+							>
+								<!-- header -->
+								<div class="mx-4 col-start-2 col-end-[-2]">
+									<header
+										class="pt-4 flex justify-between items-end"
+									>
+										<nav
+											class="flex items-baseline gap-x-9"
+										>
+											<div
+												class="flex items-baseline gap-x-2"
+											>
+												<!-- logo -->
+												<a href="/" tabindex={-1}>
+													<svg
+														class="relative top-2 fill-[hsl(var(--gray-dark))]"
+														fill="currentColor"
+														height="35"
+														width="35"
+														version="1.1"
+														id="Icons"
+														xmlns="http://www.w3.org/2000/svg"
+														xmlns:xlink="http://www.w3.org/1999/xlink"
+														viewBox="0 0 32 32"
+														xml:space="preserve"
+													>
+														<g>
+															<path
+																d="M8,12h0.2H16h8h5.4C27.7,6.2,22.3,2,16,2S4.3,6.2,2.6,12H8z"
+															></path>
+															<path
+																d="M25,14v2c0,1.7-1.3,3-3,3h-2.6c-1.3,0-2.4-0.8-2.8-2.1L16,15.6L15.4,17c-0.4,1.2-1.5,2-2.8,2H10c-1.7,0-3-1.3-3-3v-2H2.2
+		C2.1,14.7,2,15.3,2,16c0,7.7,6.3,14,14,14s14-6.3,14-14c0-0.7-0.1-1.3-0.2-2H25z M21.9,21.8C20.3,23.2,18.2,24,16,24
+		c-0.6,0-1-0.4-1-1s0.4-1,1-1c1.7,0,3.3-0.6,4.6-1.8c0.4-0.4,1-0.3,1.4,0.1C22.4,20.8,22.4,21.4,21.9,21.8z"
+															></path>
+														</g>
+													</svg>
+												</a>
+												<a
+													class="text-lg"
+													href="/"
+													tabindex={-1}>SKB</a
+												>
+											</div>
+										</nav>
+										<ul class="flex items-center gap-x-11">
+											<li>
+												<a href="/"> Contact </a>
+											</li>
+										</ul>
+									</header>
+								</div>
+								<!-- headline -->
+								<div class="mx-4 col-start-2 col-end-[-2]">
+									<h2 class="relative my-12">
+										<a class="text-2xl" href="/"
+											>SangKuk's Blog</a
+										>
+									</h2>
+								</div>
+								<!-- story -->
+								<div
+									class="mx-4 grid grid-cols-[var(--site-columns-5)] col-span-full"
+								>
+									<!-- headline -->
+									<div
+										class="relative grid grid-cols-[var(--site-columns-5)] col-span-full"
+									>
+										<div class="col-start-2 col-end-4">
+											<h2 class="mb-[72px]">
+												<a
+													class="text-header-2"
+													href="/"
+												>
+													Supercharge your apps with
+													Firebase and the Gemini API</a
+												>
+											</h2>
+										</div>
+									</div>
+									<!-- body  -->
+									<div class="col-start-2 col-end-3">
+										<div class="px-10">
+											<div
+												class="flex justify-between gap-10"
+											>
+												<!-- TODO: author, date -->
+												<div
+													class="grid grid-flow-row gap-5"
+												>
+													<div
+														class="grid grid-flow-col gap-x-5 w-fit"
+													>
+														Lorem, ipsum dolor sit
+														amet consectetur
+														adipisicing elit. Illo,
+														fuga.
+													</div>
+												</div>
+												<!-- category -->
+												<ul
+													class="flex flex-col place-items-end gap-[3px]"
+												>
+													<li>
+														<a class="btn" href="/">
+															Web
+														</a>
+													</li>
+													<li>
+														<a class="btn" href="/">
+															Gemini
+														</a>
+													</li>
+													<li>
+														<a class="btn" href="/">
+															Firestore
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- udercut -->
+						<div
+							class="undercut opacity-0 group-hover:opacity-100 group-hover:clip-path-undercut"
+							role="presentation"
+						>
+						</div>
+						<!-- overcut -->
+						<div
+							class="relative grid grid-cols-[var(--site-columns-5)]"
+						>
+							<div
+								id="overcut-grid"
+								class="overcut pb-16 grid grid-cols-[var(--site-columns-5)] col-span-full opacity-0 group-hover:opacity-100 group-hover:clip-path-overcut"
+							>
+								<!-- header -->
+								<div class="mx-4 col-start-2 col-end-[-2]">
+									<header
+										class="pt-4 flex justify-between items-end"
+									>
+										<nav
+											class="flex items-baseline gap-x-9"
+										>
+											<div
+												class="flex items-baseline gap-x-2"
+											>
+												<!-- logo -->
+												<a href="/" tabindex={-1}>
+													<svg
+														class="relative top-2 fill-[hsl(var(--gray-dark))]"
+														fill="currentColor"
+														height="35"
+														width="35"
+														version="1.1"
+														id="Icons"
+														xmlns="http://www.w3.org/2000/svg"
+														xmlns:xlink="http://www.w3.org/1999/xlink"
+														viewBox="0 0 32 32"
+														xml:space="preserve"
+													>
+														<g>
+															<path
+																d="M8,12h0.2H16h8h5.4C27.7,6.2,22.3,2,16,2S4.3,6.2,2.6,12H8z"
+															></path>
+															<path
+																d="M25,14v2c0,1.7-1.3,3-3,3h-2.6c-1.3,0-2.4-0.8-2.8-2.1L16,15.6L15.4,17c-0.4,1.2-1.5,2-2.8,2H10c-1.7,0-3-1.3-3-3v-2H2.2
+		C2.1,14.7,2,15.3,2,16c0,7.7,6.3,14,14,14s14-6.3,14-14c0-0.7-0.1-1.3-0.2-2H25z M21.9,21.8C20.3,23.2,18.2,24,16,24
+		c-0.6,0-1-0.4-1-1s0.4-1,1-1c1.7,0,3.3-0.6,4.6-1.8c0.4-0.4,1-0.3,1.4,0.1C22.4,20.8,22.4,21.4,21.9,21.8z"
+															></path>
+														</g>
+													</svg>
+												</a>
+												<a
+													class="text-lg"
+													href="/"
+													tabindex={-1}>SKB</a
+												>
+											</div>
+										</nav>
+										<ul class="flex items-center gap-x-11">
+											<li>
+												<a href="/"> Contact </a>
+											</li>
+										</ul>
+									</header>
+								</div>
+								<!-- headline -->
+								<div class="mx-4 col-start-2 col-end-[-2]">
+									<h2 class="relative my-12">
+										<a class="text-2xl" href="/"
+											>SangKuk's Blog</a
+										>
+									</h2>
+								</div>
+								<!-- story -->
+								<div
+									class="mx-4 grid grid-cols-[var(--site-columns-5)] col-span-full"
+								>
+									<!-- headline -->
+									<div
+										class="relative grid grid-cols-[var(--site-columns-5)] col-span-full"
+									>
+										<div class="col-start-2 col-end-4">
+											<h2 class="mb-[72px]">
+												<a
+													class="text-header-2"
+													href="/"
+												>
+													Supercharge your apps with
+													Firebase and the Gemini API</a
+												>
+											</h2>
+										</div>
+									</div>
+									<!-- body  -->
+									<div class="col-start-2 col-end-3">
+										<div class="px-10">
+											<div
+												class="flex justify-between gap-10"
+											>
+												<!-- TODO: author, date -->
+												<div
+													class="grid grid-flow-row gap-5"
+												>
+													<div
+														class="grid grid-flow-col gap-x-5 w-fit"
+													>
+														Lorem, ipsum dolor sit
+														amet consectetur
+														adipisicing elit. Illo,
+														fuga.
+													</div>
+												</div>
+												<!-- category -->
+												<ul
+													class="flex flex-col place-items-end gap-[3px]"
+												>
+													<li>
+														<a class="btn" href="/">
+															Web
+														</a>
+													</li>
+													<li>
+														<a class="btn" href="/">
+															Gemini
+														</a>
+													</li>
+													<li>
+														<a class="btn" href="/">
+															Firestore
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
 	</body>
 </html>
