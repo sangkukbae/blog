@@ -17,7 +17,8 @@
 		0 8px 24px hsl(var(--gray), 33%), 0 16px 32px hsl(var(--gray), 33%);
 	--site-columns-5: 1fr min(660px, 100%) minmax(0%, 260px) minmax(0%, 360px)
 		1fr;
-	--text-header-2: clamp(2rem, 4vw + 1rem, 3.5rem);
+	--site-columns-5-wide: 1fr min(760px, 100%) minmax(0%, 210px)
+		minmax(0%, 310px) 1fr;
 	--text-sm: 0.875rem;
 	--font-display: 'Noto Sans', Arial, sans-serif;
 	--theme-words-bottom-start: hsla(225, 6%, 13%, 0.08);
@@ -26,6 +27,7 @@
 	--theme-words-top-end: hsla(0, 0%, 100%, 0.02);
 	--theme-undercut: hsla(230, 90%, 63%, 0.6);
 	--theme-overcut: hsla(230, 90%, 73%, 0.8);
+	--ease-elastic-3: cubic-bezier(0.5, 1.25, 0.75, 1.25);
 }
 @font-face {
 	font-family: 'Noto Sans';
@@ -48,6 +50,11 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+html {
+	scroll-behavior: smooth;
+}
+
 ::selection {
 	background: hsl(var(--accent-dark));
 	color: hsl(var(--gray-dark));
@@ -163,14 +170,17 @@ hr {
 	border: none;
 	border-top: 1px solid hsl(var(--gray-dark));
 }
-@media (max-width: 720px) {
+time {
+	font-size: 0.875em;
+}
+/* @media (max-width: 720px) {
 	body {
 		font-size: 18px;
 	}
 	main {
 		padding: 1em;
 	}
-}
+} */
 .sr-only {
 	border: 0;
 	padding: 0;
@@ -314,23 +324,21 @@ hr {
 	grid-column: 1;
 }
 
-#overcut-grid {
-	a {
-		color: hsl(var(--gray-light));
-	}
+#overcut-grid a {
+	color: hsl(var(--gray-light));
+}
 
-	svg {
-		fill: hsl(var(--gray-light));
-	}
+#overcut-grid svg {
+	fill: hsl(var(--gray-light));
+}
 
-	.btn {
-		color: hsl(var(--gray-light));
-		border: 1px solid hsl(var(--gray));
-	}
-	.btn:hover {
-		color: hsl(var(--white));
-		background-color: hsl(var(--gray));
-	}
+#overcut-grid .btn {
+	color: hsl(var(--gray-light));
+	border: 1px solid hsl(var(--gray));
+}
+#overcut-grid .btn:hover {
+	color: hsl(var(--white));
+	background-color: hsl(var(--gray));
 }
 
 .undercut {
@@ -379,4 +387,8 @@ hr {
 		-webkit-clip-path;
 	-webkit-transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 	transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.subgrid {
+	@apply relative grid grid-cols-[var(--site-columns-5)] col-span-full;
 }

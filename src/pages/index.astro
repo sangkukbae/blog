@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import Card from '../components/Card.astro'
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
 import { getCollection } from 'astro:content'
 import FormattedDate from '../components/FormattedDate.astro'
@@ -9,6 +10,25 @@ import FormattedDate from '../components/FormattedDate.astro'
 const posts = (await getCollection('blog')).sort(
 	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
 )
+
+const categories = [
+	...new Set(
+		posts
+			.flatMap((post) => post.data.tags)
+			.sort((a, b) => a.localeCompare(b))
+	)
+]
+console.log('categories:', categories)
+
+const firstPost = posts.shift()
+
+if (!firstPost) {
+	throw new Error('No posts found')
+}
+
+const { title, description, pubDate, tags } = firstPost.data
+
+const word = title.split(' ').slice(0, 2).join(' ')
 ---
 
 <!doctype html>
@@ -21,6 +41,7 @@ const posts = (await getCollection('blog')).sort(
 		<div class="relative flex justify-center">
 			<!-- layout -->
 			<div class="w-full max-w-[100vw]">
+				<!-- main -->
 				<main class="relative overflow-hidden">
 					<!-- word container -->
 					<div
@@ -28,17 +49,17 @@ const posts = (await getCollection('blog')).sort(
 						role="presentation"
 						aria-hidden="true"
 					>
-						Supercharge your
+						{word}
 					</div>
 					<div
 						class="word-container over"
 						role="presentation"
 						aria-hidden="true"
 					>
-						Supercharge your
+						{word}
 					</div>
 					<!-- clip grid -->
-					<div id="clip-grid" class="group grid pb-16">
+					<div id="clip-grid" class="group relative grid pb-16">
 						<div
 							class="relative pb-16 grid grid-cols-[var(--site-columns-5)]"
 						>
@@ -47,54 +68,7 @@ const posts = (await getCollection('blog')).sort(
 							>
 								<!-- header -->
 								<div class="mx-4 col-start-2 col-end-[-2]">
-									<header
-										class="pt-4 flex justify-between items-end"
-									>
-										<nav
-											class="flex items-baseline gap-x-9"
-										>
-											<div
-												class="flex items-baseline gap-x-2"
-											>
-												<!-- logo -->
-												<a href="/" tabindex={-1}>
-													<svg
-														class="relative top-2 fill-[hsl(var(--gray-dark))]"
-														fill="currentColor"
-														height="35"
-														width="35"
-														version="1.1"
-														id="Icons"
-														xmlns="http://www.w3.org/2000/svg"
-														xmlns:xlink="http://www.w3.org/1999/xlink"
-														viewBox="0 0 32 32"
-														xml:space="preserve"
-													>
-														<g>
-															<path
-																d="M8,12h0.2H16h8h5.4C27.7,6.2,22.3,2,16,2S4.3,6.2,2.6,12H8z"
-															></path>
-															<path
-																d="M25,14v2c0,1.7-1.3,3-3,3h-2.6c-1.3,0-2.4-0.8-2.8-2.1L16,15.6L15.4,17c-0.4,1.2-1.5,2-2.8,2H10c-1.7,0-3-1.3-3-3v-2H2.2
-		C2.1,14.7,2,15.3,2,16c0,7.7,6.3,14,14,14s14-6.3,14-14c0-0.7-0.1-1.3-0.2-2H25z M21.9,21.8C20.3,23.2,18.2,24,16,24
-		c-0.6,0-1-0.4-1-1s0.4-1,1-1c1.7,0,3.3-0.6,4.6-1.8c0.4-0.4,1-0.3,1.4,0.1C22.4,20.8,22.4,21.4,21.9,21.8z"
-															></path>
-														</g>
-													</svg>
-												</a>
-												<a
-													class="text-lg"
-													href="/"
-													tabindex={-1}>SKB</a
-												>
-											</div>
-										</nav>
-										<ul class="flex items-center gap-x-11">
-											<li>
-												<a href="/"> Contact </a>
-											</li>
-										</ul>
-									</header>
+									<Header />
 								</div>
 								<!-- headline -->
 								<div class="mx-4 col-start-2 col-end-[-2]">
@@ -116,10 +90,8 @@ const posts = (await getCollection('blog')).sort(
 											<h2 class="mb-[72px]">
 												<a
 													class="text-header-2"
-													href="/"
-												>
-													Supercharge your apps with
-													Firebase and the Gemini API</a
+													href={`/${firstPost.slug}`}
+													>{title}</a
 												>
 											</h2>
 										</div>
@@ -135,33 +107,30 @@ const posts = (await getCollection('blog')).sort(
 													class="grid grid-flow-row gap-5"
 												>
 													<div
-														class="grid grid-flow-col gap-x-5 w-fit"
+														class="grid grid-flow-row gap-x-5 w-fit"
 													>
-														Lorem, ipsum dolor sit
-														amet consectetur
-														adipisicing elit. Illo,
-														fuga.
+														<p>{description}</p>
+														<FormattedDate
+															date={pubDate}
+														/>
 													</div>
 												</div>
 												<!-- category -->
 												<ul
 													class="flex flex-col place-items-end gap-[3px]"
 												>
-													<li>
-														<a class="btn" href="/">
-															Web
-														</a>
-													</li>
-													<li>
-														<a class="btn" href="/">
-															Gemini
-														</a>
-													</li>
-													<li>
-														<a class="btn" href="/">
-															Firestore
-														</a>
-													</li>
+													{
+														tags.map((tag) => (
+															<li>
+																<a
+																	class="btn"
+																	href="/"
+																>
+																	{tag}
+																</a>
+															</li>
+														))
+													}
 												</ul>
 											</div>
 										</div>
@@ -185,54 +154,7 @@ const posts = (await getCollection('blog')).sort(
 							>
 								<!-- header -->
 								<div class="mx-4 col-start-2 col-end-[-2]">
-									<header
-										class="pt-4 flex justify-between items-end"
-									>
-										<nav
-											class="flex items-baseline gap-x-9"
-										>
-											<div
-												class="flex items-baseline gap-x-2"
-											>
-												<!-- logo -->
-												<a href="/" tabindex={-1}>
-													<svg
-														class="relative top-2 fill-[hsl(var(--gray-dark))]"
-														fill="currentColor"
-														height="35"
-														width="35"
-														version="1.1"
-														id="Icons"
-														xmlns="http://www.w3.org/2000/svg"
-														xmlns:xlink="http://www.w3.org/1999/xlink"
-														viewBox="0 0 32 32"
-														xml:space="preserve"
-													>
-														<g>
-															<path
-																d="M8,12h0.2H16h8h5.4C27.7,6.2,22.3,2,16,2S4.3,6.2,2.6,12H8z"
-															></path>
-															<path
-																d="M25,14v2c0,1.7-1.3,3-3,3h-2.6c-1.3,0-2.4-0.8-2.8-2.1L16,15.6L15.4,17c-0.4,1.2-1.5,2-2.8,2H10c-1.7,0-3-1.3-3-3v-2H2.2
-		C2.1,14.7,2,15.3,2,16c0,7.7,6.3,14,14,14s14-6.3,14-14c0-0.7-0.1-1.3-0.2-2H25z M21.9,21.8C20.3,23.2,18.2,24,16,24
-		c-0.6,0-1-0.4-1-1s0.4-1,1-1c1.7,0,3.3-0.6,4.6-1.8c0.4-0.4,1-0.3,1.4,0.1C22.4,20.8,22.4,21.4,21.9,21.8z"
-															></path>
-														</g>
-													</svg>
-												</a>
-												<a
-													class="text-lg"
-													href="/"
-													tabindex={-1}>SKB</a
-												>
-											</div>
-										</nav>
-										<ul class="flex items-center gap-x-11">
-											<li>
-												<a href="/"> Contact </a>
-											</li>
-										</ul>
-									</header>
+									<Header />
 								</div>
 								<!-- headline -->
 								<div class="mx-4 col-start-2 col-end-[-2]">
@@ -254,10 +176,8 @@ const posts = (await getCollection('blog')).sort(
 											<h2 class="mb-[72px]">
 												<a
 													class="text-header-2"
-													href="/"
-												>
-													Supercharge your apps with
-													Firebase and the Gemini API</a
+													href={`/${firstPost.slug}`}
+													>{title}</a
 												>
 											</h2>
 										</div>
@@ -273,39 +193,80 @@ const posts = (await getCollection('blog')).sort(
 													class="grid grid-flow-row gap-5"
 												>
 													<div
-														class="grid grid-flow-col gap-x-5 w-fit"
+														class="grid grid-flow-row gap-x-5 w-fit text-[hsl(var(--gray-light))]"
 													>
-														Lorem, ipsum dolor sit
-														amet consectetur
-														adipisicing elit. Illo,
-														fuga.
+														<p>{description}</p>
+														<FormattedDate
+															date={pubDate}
+														/>
 													</div>
 												</div>
 												<!-- category -->
 												<ul
 													class="flex flex-col place-items-end gap-[3px]"
 												>
-													<li>
-														<a class="btn" href="/">
-															Web
-														</a>
-													</li>
-													<li>
-														<a class="btn" href="/">
-															Gemini
-														</a>
-													</li>
-													<li>
-														<a class="btn" href="/">
-															Firestore
-														</a>
-													</li>
+													{
+														tags.map((tag) => (
+															<li>
+																<a
+																	class="btn"
+																	href="/"
+																>
+																	{tag}
+																</a>
+															</li>
+														))
+													}
 												</ul>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+					<!-- main grid -->
+					<div
+						class="relative px-4 grid grid-cols-[var(--site-columns-5)]"
+					>
+						<!-- card list -->
+						<div class="col-start-2 col-end-3">
+							{
+								posts.map((post) => (
+									<Card
+										title={post.data.title}
+										description={post.data.description}
+										pubDate={post.data.pubDate}
+										tags={post.data.tags}
+										slug={post.slug}
+									/>
+								))
+							}
+						</div>
+						<!-- categories -->
+						<aside class="hidden lg:block col-start4 col-end-5">
+							<h4 class="mb-5 text-xl">Catetories</h4>
+							<ul class="grid gap-y-[3px] h-fit">
+								{
+									categories.map((category) => (
+										<li>
+											<a class="btn" href="/">
+												{category}
+											</a>
+										</li>
+									))
+								}
+							</ul>
+						</aside>
+					</div>
+					<!-- pagination -->
+					<div
+						class="relative px-4 grid grid-cols-[var(--site-columns-5)]"
+					>
+						<div class="col-start-2 col-end-3">
+							<nav class="flex justify-center py-[100px]">
+								<a href="/">Next</a>
+							</nav>
 						</div>
 					</div>
 				</main>

@@ -1,95 +1,141 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
+import type { CollectionEntry } from 'astro:content'
+import BaseHead from '../components/BaseHead.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import FormattedDate from '../components/FormattedDate.astro'
+import type { MarkdownHeading } from 'astro'
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & { headings: MarkdownHeading[] }
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, headings } = Astro.props
+console.log('headings:', headings)
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
 	</head>
-
 	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{
-						heroImage && (
-							<img
-								width={1020}
-								height={510}
-								src={heroImage}
-								alt=""
-							/>
-						)
-					}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on{' '}
-										<FormattedDate date={updatedDate} />
+		<!-- container -->
+		<div class="relarive flex justify-center">
+			<!-- layout -->
+			<div class="w-full max-w-[100vw]">
+				<main class="relative grid grid-cols-[var(--site-columns-5)]">
+					<!-- main subgrid -->
+					<div
+						class="relative grid grid-cols-[var(--site-columns-5)] col-span-full"
+					>
+						<div
+							class="relative grid grid-cols-[var(--site-columns-5)] col-span-full"
+						>
+							<div
+								class="relative px-4 grid grid-cols-[var(--site-columns-5)] col-span-full overflow-hidden bg-[hsl(230,_85%,_8%)]"
+								style={{
+									clipPath:
+										'polygon(0 0,100% 0,100% 92%,0 100%)'
+								}}
+							>
+								<!-- background image -->
+								<div
+									class="absolute right-0 top-5 opacity-[0.35] z-[-1]"
+								>
+									<img
+										src="https://firebasestorage.googleapis.com/v0/b/first-class-blog.appspot.com/o/posts%2Fgemini-blur.svg?alt=media&token=6731dfae-249d-493f-adf2-8a4699103a04"
+									/>
+								</div>
+								<!-- header -->
+								<div class="col-start-2 col-end-[-2]">
+									<Header />
+								</div>
+								<!-- haedline -->
+								<div
+									class="relative grid grid-cols-[var(--site-columns-5)] col-span-full"
+								>
+									<h2
+										class="relative my-12 col-start-2 col-end-[-2]"
+									>
+										<a class="text-2xl" href="/"
+											>SangKuk's Blog</a
+										>
+									</h2>
+								</div>
+								<div
+									class="py-[30px] grid grid-cols-[3fr_1fr] col-start-2 col-end-[-2] gap-8"
+								>
+									<!-- title -->
+									<h2 class="text-header-2 col-span-full">
+										{title}
+									</h2>
+									<!-- description -->
+									<div
+										class="col-start-1 col-end-3 mb-[clamp(16px,4vw,52px)]"
+									>
+										<div
+											class="text-[clamp(1.25rem,2vw+1rem,2.5rem)] leading-[1.5]"
+										>
+											{description}
+										</div>
 									</div>
-								)
-							}
+									<!-- date -->
+									<div class="col-start-1 col-end-4">
+										<FormattedDate date={pubDate} />
+									</div>
+									<!-- spacer -->
+									<div class="pb-20 row-start-5 row-end-auto">
+									</div>
+								</div>
+							</div>
 						</div>
-						<h1>{title}</h1>
-						<hr />
+						<div
+							class="relative my-10 grid grid-cols-[var(--site-columns-5-wide)] col-span-full"
+						>
+							<article
+								class="prose px-4 grid grid-cols-[min(760px,100%)] col-start-2 col-end-4"
+							>
+								<slot />
+							</article>
+							<aside class="ml-10 p-0 col-start-4 col-end-5">
+								<!-- toc -->
+								<div class="sticky top-5 mt-10">
+									<nav class="mr-4">
+										<h5
+											class="mb-6 text-lg text-[hlsa(var(--gray-dark),0.7)]"
+										>
+											Table of Contents
+										</h5>
+										<ul class="flex flex-col gap-2">
+											{
+												headings.map((heading) => (
+													<li
+														style={{
+															paddingLeft: `${heading.depth * 0.25}rem`
+														}}
+													>
+														<a
+															class="text-sm font-bold"
+															href={`#${heading.slug}`}
+															style={{
+																color:
+																	heading.depth >
+																	2
+																		? 'hsla(var(--gray-dark), 0.7)'
+																		: 'hsl(var(--gray-dark))'
+															}}
+														>
+															{heading.text}
+														</a>
+													</li>
+												))
+											}
+										</ul>
+									</nav>
+								</div>
+							</aside>
+						</div>
 					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
+				</main>
+			</div>
+		</div>
 	</body>
 </html>

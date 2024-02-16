@@ -1,0 +1,121 @@
+---
+interface Props {
+	title: string
+	description: string
+	pubDate: Date
+	tags: string[]
+	slug: string
+}
+
+const { title, description, pubDate, tags, slug } = Astro.props
+---
+
+<div class="card">
+	<!-- title -->
+	<h3>
+		<a href={`/${slug}`}>{title}</a>
+	</h3>
+	<!-- body -->
+	<div class="flex justify-between gap-10">
+		<div class="grid grid-flow-row">
+			<p>
+				{description}
+			</p>
+			<time datetime={pubDate.toISOString()}>
+				{
+					pubDate.toLocaleDateString('en-us', {
+						year: 'numeric',
+						month: 'long',
+						day: 'numeric'
+					})
+				}
+			</time>
+		</div>
+		<ul class="flex flex-col place-items-end gap-[3px]">
+			{
+				tags.map((tag) => (
+					<li>
+						<a class="btn" href="/">
+							{tag}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</div>
+<style>
+	.card {
+		display: grid;
+		row-gap: 40px;
+		position: relative;
+		padding: 40px;
+		--border-scaleX: 102%;
+	}
+
+	.card:before {
+		content: '';
+		position: absolute;
+		inset-inline: 0;
+		inset-block-end: 0;
+		block-size: 1px;
+		background: white;
+		-webkit-transition: -webkit-transform 0.3s var(--ease-elastic-3);
+		transition: -webkit-transform 0.3s var(--ease-elastic-3);
+		transition: transform 0.3s var(--ease-elastic-3);
+		transition:
+			transform 0.3s var(--ease-elastic-3),
+			-webkit-transform 0.3s var(--ease-elastic-3);
+		inset-block-start: 0;
+	}
+	.card:after {
+		content: '';
+		position: absolute;
+		inset-inline: 0;
+		inset-block-end: 0;
+		block-size: 1px;
+		background: white;
+		-webkit-transition: -webkit-transform 0.3s var(--ease-elastic-3);
+		transition: -webkit-transform 0.3s var(--ease-elastic-3);
+		transition: transform 0.3s var(--ease-elastic-3);
+		transition:
+			transform 0.3s var(--ease-elastic-3),
+			-webkit-transform 0.3s var(--ease-elastic-3);
+	}
+
+	.card:hover:before,
+	.card:hover:after {
+		background: hsl(var(--accent-dark));
+		-webkit-transform: scaleX(var(--border-scaleX));
+		transform: scaleX(var(--border-scaleX));
+		transform-origin: center;
+		block-size: 3px;
+	}
+
+	.card:hover a {
+		color: hsl(var(--accent-dark));
+	}
+
+	.card:hover .btn {
+		color: hsl(var(--accent-dark));
+		border: 1px solid hsl(var(--accent-dark));
+	}
+
+	.card:hover .btn:hover {
+		color: hsl(var(--gray));
+	}
+
+	.card:not(:first-child) {
+		margin-top: -1px;
+	}
+
+	.card:hover ~ .card:before {
+		opacity: 0;
+	}
+	.card:hover p {
+		color: hsl(var(--accent-dark));
+	}
+	.card:hover time {
+		color: hsl(var(--accent-dark));
+	}
+</style>
