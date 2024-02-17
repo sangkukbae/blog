@@ -1,10 +1,11 @@
 ---
+import { getCollection } from 'astro:content'
+
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+import { slugify } from '../../lib/utils'
 import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
-import Footer from '../components/Footer.astro'
 import Card from '../components/Card.astro'
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
-import { getCollection } from 'astro:content'
 import FormattedDate from '../components/FormattedDate.astro'
 
 const posts = (await getCollection('blog')).sort(
@@ -18,7 +19,6 @@ const categories = [
 			.sort((a, b) => a.localeCompare(b))
 	)
 ]
-console.log('categories:', categories)
 
 const firstPost = posts.shift()
 
@@ -64,14 +64,14 @@ const word = title.split(' ').slice(0, 2).join(' ')
 							class="relative pb-16 grid grid-cols-[var(--site-columns-5)]"
 						>
 							<div
-								class="grid grid-cols-[var(--site-columns-5)] col-span-full"
+								class="px-4 grid grid-cols-[var(--site-columns-5)] col-span-full"
 							>
 								<!-- header -->
-								<div class="mx-4 col-start-2 col-end-[-2]">
+								<div class="col-start-2 col-end-[-2]">
 									<Header />
 								</div>
 								<!-- headline -->
-								<div class="mx-4 col-start-2 col-end-[-2]">
+								<div class="col-start-2 col-end-[-2]">
 									<h2 class="relative my-12">
 										<a class="text-2xl" href="/"
 											>SangKuk's Blog</a
@@ -80,7 +80,7 @@ const word = title.split(' ').slice(0, 2).join(' ')
 								</div>
 								<!-- story -->
 								<div
-									class="mx-4 grid grid-cols-[var(--site-columns-5)] col-span-full"
+									class="grid grid-cols-[var(--site-columns-5)] col-span-full"
 								>
 									<!-- headline -->
 									<div
@@ -124,7 +124,7 @@ const word = title.split(' ').slice(0, 2).join(' ')
 															<li>
 																<a
 																	class="btn"
-																	href="/"
+																	href={`/category/${slugify(tag)}`}
 																>
 																	{tag}
 																</a>
@@ -150,14 +150,14 @@ const word = title.split(' ').slice(0, 2).join(' ')
 						>
 							<div
 								id="overcut-grid"
-								class="overcut pb-16 grid grid-cols-[var(--site-columns-5)] col-span-full opacity-0 group-hover:opacity-100 group-hover:clip-path-overcut"
+								class="overcut px-4 pb-16 grid grid-cols-[var(--site-columns-5)] col-span-full opacity-0 group-hover:opacity-100 group-hover:clip-path-overcut"
 							>
 								<!-- header -->
-								<div class="mx-4 col-start-2 col-end-[-2]">
+								<div class="col-start-2 col-end-[-2]">
 									<Header />
 								</div>
 								<!-- headline -->
-								<div class="mx-4 col-start-2 col-end-[-2]">
+								<div class="col-start-2 col-end-[-2]">
 									<h2 class="relative my-12">
 										<a class="text-2xl" href="/"
 											>SangKuk's Blog</a
@@ -166,7 +166,7 @@ const word = title.split(' ').slice(0, 2).join(' ')
 								</div>
 								<!-- story -->
 								<div
-									class="mx-4 grid grid-cols-[var(--site-columns-5)] col-span-full"
+									class="grid grid-cols-[var(--site-columns-5)] col-span-full"
 								>
 									<!-- headline -->
 									<div
@@ -210,7 +210,7 @@ const word = title.split(' ').slice(0, 2).join(' ')
 															<li>
 																<a
 																	class="btn"
-																	href="/"
+																	href={`/category/${slugify(tag)}`}
 																>
 																	{tag}
 																</a>
@@ -250,7 +250,10 @@ const word = title.split(' ').slice(0, 2).join(' ')
 								{
 									categories.map((category) => (
 										<li>
-											<a class="btn" href="/">
+											<a
+												class="btn"
+												href={`/category/${slugify(category)}`}
+											>
 												{category}
 											</a>
 										</li>

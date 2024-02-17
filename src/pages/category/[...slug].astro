@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content'
+
+import BaseHead from '../../components/BaseHead.astro'
+import Card from '../../components/Card.astro'
+import Header from '../../components/Header.astro'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
+import { slugify } from '../../../lib/utils'
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog')
+	const categories = [
+		...new Set<string>(posts.flatMap((post) => post.data.tags))
+	]
+
+	return categories.map((category) => ({
+		params: { slug: slugify(category) },
+		props: { category, categories }
+	}))
+}
+type Props = { category: string; categories: string[] }
+
+const { category, categories } = Astro.props
+console.log('categories:', categories)
+
+const posts = (await getCollection('blog')).filter((post) =>
+	post.data.tags.includes(category)
+)
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<!-- container -->
+		<div class="relative flex justify-center">
+			<!-- layout -->
+			<div class="w-full max-w-[100vw]">
+				<!-- main -->
+				<main class="relative overflow-hidden">
+					<div id="overcut-grid" class="relative grid pb-16">
+						<div
+							class="relative pb-16 grid grid-cols-[var(--site-columns-5)]"
+						>
+							<div
+								class="px-4 grid grid-cols-[var(--site-columns-5)] col-span-full bg-[hsl(var(--accent-dark))]"
+								style={{
+									clipPath:
+										'polygon(0 0,100% 0,100% 92%,0 100%)'
+								}}
+							>
+								<!-- header -->
+								<div class="col-start-2 col-end-[-2]">
+									<Header />
+								</div>
+								<!-- headline -->
+								<div class="col-start-2 col-end-[-2]">
+									<h2 class="relative my-12">
+										<a class="text-2xl" href="/"
+											>SangKuk's Blog</a
+										>
+									</h2>
+								</div>
+								<!-- category -->
+								<div class="col-start-2 col-end-4">
+									<h1
+										class="text-header-1 pb-3 text-[hsl(var(--gray-light))]"
+									>
+										{category}
+									</h1>
+									<h2 class="px-10 py-16"></h2>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- main grid -->
+					<div
+						class="relative px-4 grid grid-cols-[var(--site-columns-5)]"
+					>
+						<!-- card list -->
+						<div class="col-start-2 col-end-3">
+							{
+								posts.map((post) => (
+									<Card
+										title={post.data.title}
+										description={post.data.description}
+										pubDate={post.data.pubDate}
+										tags={post.data.tags}
+										slug={post.slug}
+									/>
+								))
+							}
+						</div>
+						<!-- categories -->
+						<aside class="hidden lg:block col-start4 col-end-5">
+							<h4 class="mb-5 text-xl">Catetories</h4>
+							<ul class="grid gap-y-[3px] h-fit">
+								{
+									categories.map((category) => (
+										<li>
+											<a
+												class="btn"
+												href={`/category/${slugify(category)}`}
+											>
+												{category}
+											</a>
+										</li>
+									))
+								}
+							</ul>
+						</aside>
+					</div>
+					<!-- pagination -->
+					<div
+						class="relative px-4 grid grid-cols-[var(--site-columns-5)]"
+					>
+						<div class="col-start-2 col-end-3">
+							<nav class="flex justify-center py-[100px]">
+								<a href="/">Next</a>
+							</nav>
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
+	</body>
+</html>

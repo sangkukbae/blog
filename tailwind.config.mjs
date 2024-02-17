@@ -4,6 +4,7 @@ export default {
 	theme: {
 		extend: {
 			fontSize: {
+				'header-1': 'clamp(2rem, 4vw + 1rem, 4rem)',
 				'header-2': 'clamp(2rem, 4vw + 1rem, 3.5rem)'
 			}
 		}

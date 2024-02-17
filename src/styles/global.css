@@ -340,7 +340,6 @@ time {
 	color: hsl(var(--white));
 	background-color: hsl(var(--gray));
 }
-
 .undercut {
 	z-index: -1;
 	height: 100%;

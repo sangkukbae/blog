@@ -1,4 +1,6 @@
 ---
+import { slugify } from '../../lib/utils'
+
 interface Props {
 	title: string
 	description: string
@@ -35,7 +37,7 @@ const { title, description, pubDate, tags, slug } = Astro.props
 			{
 				tags.map((tag) => (
 					<li>
-						<a class="btn" href="/">
+						<a class="btn" href={`/category/${slugify(tag)}`}>
 							{tag}
 						</a>
 					</li>
